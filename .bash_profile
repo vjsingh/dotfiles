@@ -1,3 +1,4 @@
+# Dirs
 alias cdjun="cd ~/Documents/13Brown/111JuniorYear/Second\ Semester"
 alias cdjazz="cd ~/Documents/workspace/jazz/jazz"
 alias cdweb="cd ~/Documents/workspace/webmd"
@@ -5,6 +6,13 @@ alias cdjk="cd ~/Documents/workspace/jvoh/jvkoh"
 alias cdvs="cd ~/Documents/workspace/vsingh"
 alias cdmus="cd ~/Documents/workspace/music"
 alias cdws="cd ~/Documents/workspace/"
+alias cdart="cd ~/Documents/workspace/arter/"
+alias cdv="cd ~/venmo-devops"
+alias cdvp="cd ~/venmo-devops/venmo-platform/"
+alias cdvw="cd ~/venmo-devops/venmo-platform/webapp"
+alias cddot="cd /Users/Varun/Documents/workspace/dotfiles/"
+
+
 alias sshcs="ssh vjsingh@ssh.cs.brown.edu"
 alias sshcsx="ssh -X vjsingh@ssh.cs.brown.edu"
 alias vbp="vim /Users/Varun/.bash_profile"
@@ -19,7 +27,18 @@ alias sshmus='ssh -vi ~/.ssh/ec2.pem ubuntu@ec2-107-20-71-252.compute-1.amazonaw
 alias rsmus='ssh -i ~/.ssh/ec2.pem ubuntu@ec2-107-20-71-252.compute-1.amazonaws.com "/var/jazz/update restart"'
 alias upjazz='gp; rsjazz'
 alias upmus='gp; rsmus'
+alias mongoart='mongo staff.mongohq.com:10095/nodejitsudb992359367398 -u nodejitsu -p be8725eaf1cb68e7a129cebf81f66480'
 
+# Venmo
+alias vm="ssh-add ~/.ssh/id_rsav;cd ~/venmo-devops && vagrant ssh"
+alias ops="cd ~/venmo-devops"
+alias venmo="cd ~/venmo-devops/venmo-platform"
+
+export VGIT_USERNAME=vjsingh  #github
+# Venmo
+if [ -f ~/venmo-devops/venmo_host_aliases ]; then
+  source ~/venmo-devops/venmo_host_aliases
+fi
 
 # Setting PATH for MacPython 2.5
 # The orginal version is saved in .bash_profile.pysave
@@ -36,6 +55,31 @@ export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
 alias ls='ls -G'
+alias grep='grep -i --color=auto'
+export PS1="\h:\w$ "
+export EDITOR=vim
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+
+# From Venmo Kortina
+parse_git_dirty() {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/(\1$(parse_git_dirty))/"
+}
+parse_svn_branch() {
+  svn info 2> /dev/null | grep URL | sed -e "s/.*\/\(.*\)$/(\1)/"
+}
+PS1="\n\
+  \[\033[0;32m\]\u$DIM \[\033[0;37m\]@ \[\033[0;33m\]\h
+\[\033[0;35m\]\$PWD \[\033[0;37m\]\$(parse_git_branch)\$(parse_svn_branch)$ "; export PS1
+
+test -r /sw/bin/init.sh && . /sw/bin/init.sh
+
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
 
 # Setup some colors to use later in interactive shell or scripts
 export COLOR_NC='\e[0m' # No Color
@@ -63,34 +107,35 @@ alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 
 # Git
-alias gcb="git checkout -b";
-alias gs="git status"
-alias ga="git add"
-alias gsq="git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
-alias gb="git branch"
-alias gc="git checkout"
-alias gcm="git checkout master"
-alias gcb="git checkout -b"
-alias gcamw="git commit -a -m working"
-alias gms="git merge --squash"
-alias grh="git reset HEAD"
-alias grhh="git reset --hard HEAD"
-alias gsf="git svn fetch; git svn rebase; arc build"
-alias gpr="git pull --rebase"
-alias gl="git log"
-alias gd="git diff"
-#alias gf='git fetch'
-alias ad='arc diff'
-alias adp='arc diff --preview'
-alias gsh='git show'
-alias gca='git commit -a'
-alias gcam="git commit -a -m"
-alias gcaa='git commit -a --amend'
-alias gp='git push'
-alias gpu='git pull'
-alias gu='git fetch; git svn rebase; arc build'
-alias gr='git rebase -i origin'
-alias gcp='git cherry-pick'
+source /usr/local/bin/my_scripts/make-completion-wrapper.sh
+gitalias gs "git status"
+gitalias ga "git add"
+#gitalias gsq "git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
+gitalias gb "git branch"
+gitalias gc "git checkout"
+gitalias gcm "git checkout master"
+gitalias gcb "git checkout -b"
+gitalias gcamw "git commit -a -m working"
+gitalias gms "git merge --squash"
+gitalias grh "git reset HEAD"
+gitalias grhh "git reset --hard HEAD"
+#gitalias gsf "git svn fetch; git svn rebase; arc build"
+gitalias gpr "git pull --rebase"
+gitalias gl "git log"
+gitalias gd "git diff"
+alias gdc='git diff | ack "^([\+-]|diff)" | less'
+#gitalias gf 'git fetch'
+gitalias ad 'arc diff'
+gitalias adp 'arc diff --preview'
+gitalias gsh 'git show'
+gitalias gca 'git commit -a'
+gitalias gcam "git commit -a -m"
+gitalias gcaa 'git commit -a --amend'
+gitalias gp 'git push'
+gitalias gpu 'git pull'
+#gitalias gu 'git fetch; git svn rebase; arc build'
+gitalias gr 'git rebase -i origin'
+gitalias gcp 'git cherry-pick'
 
 alias ls="ls -G"
 alias ll="ls -l"
@@ -106,6 +151,9 @@ alias vt='vim -t' # useful alias
 
 alias ..='cd ..'
 alias ...='cd ../..'
+
+source ~/.git-completion.bash
+
 
 #ulimit -n 1024
 HISTFILESIZE=1000000000

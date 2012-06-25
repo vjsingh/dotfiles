@@ -1,9 +1,2 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/Varun/.vim'
-let g:netrw_dirhist_2='/Users/Varun/Desktop/delete'
-let g:netrw_dirhist_3='/Users/Varun/.vim/ruby'
-let g:netrw_dirhist_4='/Users/Varun/Documents/workspace/jvoh/jvkoh/config'
-let g:netrw_dirhist_5='/Users/Varun/Documents/workspace/jvoh/jvkoh/node_modules/tower/lib/tower/server/application'
-let g:netrw_dirhist_6='/Users/Varun/Documents/workspace/jvoh/jvkoh/app/controllers'
-let g:netrw_dirhist_7='/Users/Varun/Documents/workspace/vsingh/app/controllers'
+let g:netrw_dirhist_cnt =0
