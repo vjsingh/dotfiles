@@ -1,2 +1,11 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/Users/Varun/.vim'
+let g:netrw_dirhist_2='/Users/Varun/.oh-my-zsh'
+let g:netrw_dirhist_3='/Users/Varun/.oh-my-zsh/plugins/vi-mode'
+let g:netrw_dirhist_4='/Users/Varun/Documents/workspace/dotfiles/.vim/ruby'
+let g:netrw_dirhist_5='/Users/Varun/venmo-devops/venmo-platform/mothership/test'
+let g:netrw_dirhist_6='/Users/Varun/venmo-devops/venmo-platform/.git'
+let g:netrw_dirhist_7='/Users/Varun/venmo-devops/venmo-platform/mothership/static/js/api/app'
+let g:netrw_dirhist_8='/Users/Varun/venmo-devops/venmo-platform/api/static/js/tests/spec'
+let g:netrw_dirhist_9='/Users/Varun/Documents/workspace/cs173/parseltongue-lang/broken-interps'

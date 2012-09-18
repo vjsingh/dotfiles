@@ -10,14 +10,23 @@
 " EXAMPLES are available in /usr/local/doc/startups.
 "
 
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
 " Pathogen
 call pathogen#infect()
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
-filetype plugin indent on
+"filetype plugin indent on
 filetype on
 filetype plugin on
-filetype indent on
+
+" Have Vim load indentation rules according to the detected filetype. Per
+" default Debian Vim only load filetype specific plugins.
+if has("autocmd")
+    " filetype indent on
+endif
 syntax on
 
 " Kortina Venmo
@@ -34,7 +43,7 @@ set hlsearch
 set ignorecase
 set smartcase
 set cursorline
-"set cursorcolumn
+set cursorcolumn
 "set list " turn invisibles on by default
 " show in title bar
 set title
@@ -46,6 +55,8 @@ set si " smartindent    (local to buffer)
 set tags=./tags;
 set grepprg=ack
 "set list
+" Words with dashes are one word
+set iskeyword+=-
 
 let jslint_command_options = '-conf ~/Dropbox/nix/bin/jsl.conf -nofilelisting -nocontext -nosummary -nologo -process'
 "set equalalways " Multiple windows, when created, are equal in size
@@ -82,19 +93,27 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+nnoremap ; :
+nmap <silent> ,/ :nohlsearch<CR>
+" Easy window navigation
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" w!! to write with sudo
+cnoreabbrev <expr> w!!
+                \((getcmdtype() == ':' && getcmdline() == 'w!!')
+                \?('!sudo tee % >/dev/null'):('w!!'))
 
 " make a shortcut to turn off all indentation
 nnoremap <C-i> :setl noai nocin nosi inde=<CR>
 
 " auto indent to 2 spaces
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
-
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -107,18 +126,12 @@ syntax on
 set number
 
 hi clear SpellBad
-hi SpellBad cterm=underline,bold ctermfg=magenta
+hi SpellBad cterm=underline,bold ctermfg=red
 
 " Have Vim jump to the last position when reopening a file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal g'\"" | endif
-endif
-
-" Have Vim load indentation rules according to the detected filetype. Per
-" default Debian Vim only load filetype specific plugins.
-if has("autocmd")
-  filetype indent on
 endif
 
 set showcmd            " Show (partial) command in status line.
@@ -282,6 +295,9 @@ nmap \v :e $MYVIMRC<CR>
 :runtime! ~/.vim/
 ":helptags ~/.vim/doc
 
+" \vs splits in 2 and sets scrollbind
+:noremap <silent> <Leader>vs :<C-u>let @z=&so<CR>:set so=0 noscb<CR>:bo vs<CR>Ljzt:setl scb<CR><C-w>p:setl scb<CR>:let &so=@z<CR>
+
 
 let g:pydiction_location = '~/.vim/bundle/pydiction/ftplugin/pydiction-1.2/complete-dict'
 "##################################################
@@ -304,12 +320,6 @@ vnoremap <silent><C-Left> :<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar
 vnoremap <silent><C-Right> <Esc>`>:<C-U>call search('\C\<\<Bar>\%(^\<Bar>[^'.g:camelchar.']\@<=\)['.g:camelchar.']\<Bar>['.g:camelchar.']\ze\%([^'.g:camelchar.']\&\>\@!\)\<Bar>\%$','W')<CR>v`<o
 
 "##################################################
-
-" Jump to last cursor position unless it's invalid or in an event handler
-autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \ exe "normal g`\"" |
-    \ endif
 
 " https://wincent.com/blog/2-hours-with-vim
 "function! AckGrep(command)
@@ -421,3 +431,36 @@ endfunction
 command! -complete=file -nargs=* Gstaged call s:RunShellCommand('git diff --staged')
 " command! -complete=file -nargs=* Git call s:RunShellCommand('git '.<q-args>)
 
+function! DoubleWS()
+    let pos = getpos('.')
+    let reg = getreg('@')
+    exe '%s/^\s*/&&/e'
+    call setreg('@',reg)
+    call setpos('.',pos)
+endfunction
+
+function! HalfWS()
+    let pos = getpos('.')
+    let reg = getreg('@')
+    exe '%s#^\s*#\=matchstr(submatch(0),"^.\\{".string(float2nr(len(submatch(0))/2))."\}")#e'
+    call setreg('@',reg)
+    call setpos('.',pos)
+endfunction
+
+nmap ,dws :call DoubleWS()<CR>
+nmap ,hws :call HalfWS()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MULTIPURPOSE TAB KEY
+" Indent if we're at the beginning of a line. Else, do completion.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <s-tab> <c-n>

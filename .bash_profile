@@ -7,18 +7,74 @@ alias cdvs="cd ~/Documents/workspace/vsingh"
 alias cdmus="cd ~/Documents/workspace/music"
 alias cdws="cd ~/Documents/workspace/"
 alias cdart="cd ~/Documents/workspace/arter/"
+alias cdcs="cd ~/Documents/workspace/cs173/"
+
 alias cdv="cd ~/venmo-devops"
 alias cdvp="cd ~/venmo-devops/venmo-platform/"
 alias cdvw="cd ~/venmo-devops/venmo-platform/webapp"
+alias cdms="cd ~/venmo-devops/venmo-platform/mothership"
 alias cddot="cd /Users/Varun/Documents/workspace/dotfiles/"
+alias cdscripts="pushd /usr/local/bin/my_scripts"
+alias cdvi="cd ~/Documents/workspace/virusGame/"
+alias cdfb="cd ~/Documents/facebook11"
 
+#Utility
+#alias akk='git grep -n --color --heading --break'
+alias akk='git grep -n --color'
+alias ls='ls -G'
+alias grep='grep -i --color=auto'
+
+#Screen
+alias sr="screen -r"
+
+# Git
+#source /usr/local/bin/my_scripts/make-completion-wrapper.sh
+alias gs="git status"
+alias ga="git add"
+#gitalias gsq "git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
+alias gb="git branch"
+alias gc="git checkout"
+alias gcm="git checkout master"
+alias gcb="git checkout -b"
+alias gcamw="git commit -a -m working"
+alias gms="git merge --squash"
+alias grh="git reset HEAD"
+alias grhh="git reset --hard HEAD"
+#gitalias gsf "git svn fetch; git svn rebase; arc build"
+alias gpr="git pull --rebase"
+alias git up="git pull --rebase"
+alias gl="git log"
+alias glg="git lg"
+alias gd="git diff"
+alias gdc='git diff | ack="^([\+-]|diff)" | less'
+#gitalias gf 'git fetch'
+alias ad='arc diff'
+alias adp='arc diff --preview'
+alias gsh='git show'
+alias gca='git commit -a'
+alias gcam='git commit -a -m'
+alias gcaa='git commit -a --amend'
+alias gp='git push'
+alias gpu='git pull'
+#gitalias gu 'git fetch; git svn rebase; arc build'
+alias gr='git rebase -i origin'
+alias gcp='git cherry-pick'
+
+alias ls="ls -G"
+alias ll="ls -l"
+alias la="ls -al"
+alias lstree-"ls -R | grep ':$' | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias gD="gb -D"
+
+alias vbp="vim /Users/Varun/.bash_profile"
+alias sbp="source ~/.bash_profile"
+alias v='/Applications/MacVim.app/Contents/MacOS/Vim '
+alias vt='vim -t' 
+alias ..='cd ..'
+alias ...='cd .. ; cd ..'
 
 alias sshcs="ssh vjsingh@ssh.cs.brown.edu"
 alias sshcsx="ssh -X vjsingh@ssh.cs.brown.edu"
-alias vbp="vim /Users/Varun/.bash_profile"
-alias sbp="source ~/.bash_profile"
-alias cdscripts="pushd /usr/local/bin/my_scripts"
-alias v='/Applications/MacVim.app/Contents/MacOS/Vim '
 alias gpnd='git push nodester master'
 alias sshaz='ssh -vi ~/.ssh/ec2.pem ubuntu@107.21.124.83'
 alias upjazz='ssh -i ~/.ssh/ec2.pem ubuntu@107.21.124.83 "/var/jazz/update"'
@@ -34,32 +90,26 @@ alias vm="ssh-add ~/.ssh/id_rsav;cd ~/venmo-devops && vagrant ssh"
 alias ops="cd ~/venmo-devops"
 alias venmo="cd ~/venmo-devops/venmo-platform"
 
+#Config Nonsense
 export VGIT_USERNAME=vjsingh  #github
 # Venmo
 if [ -f ~/venmo-devops/venmo_host_aliases ]; then
   source ~/venmo-devops/venmo_host_aliases
 fi
-
 # Setting PATH for MacPython 2.5
 # The orginal version is saved in .bash_profile.pysave
 export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:/Applications/Racket v5.0.1/bin/:${PATH}"
-
 #Set path for ruby gems
 export PATH="/Users/Varun/.gem/ruby/1.8/bin:${PATH}"
-
-alias cdvi="cd ~/Documents/workspace/virusGame/"
-alias cdfb="cd ~/Documents/facebook11"
-
 # source ~/.bashrc
 export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
 export CLICOLOR=1
-alias ls='ls -G'
-alias grep='grep -i --color=auto'
-export PS1="\h:\w$ "
+#export PS1="\h:\w$ "
 export EDITOR=vim
-shopt -s histappend
+#setopt -s histappend
 PROMPT_COMMAND='history -a'
+
 
 # From Venmo Kortina
 parse_git_dirty() {
@@ -71,9 +121,9 @@ parse_git_branch() {
 parse_svn_branch() {
   svn info 2> /dev/null | grep URL | sed -e "s/.*\/\(.*\)$/(\1)/"
 }
-PS1="\n\
-  \[\033[0;32m\]\u$DIM \[\033[0;37m\]@ \[\033[0;33m\]\h
-\[\033[0;35m\]\$PWD \[\033[0;37m\]\$(parse_git_branch)\$(parse_svn_branch)$ "; export PS1
+#PS1="\n\
+  #\[\033[0;32m\]\u$DIM \[\033[0;37m\]@ \[\033[0;33m\]\h
+#\[\033[0;35m\]\$PWD \[\033[0;37m\]\$(parse_git_branch)\$(parse_svn_branch)$ "; export PS1
 
 test -r /sw/bin/init.sh && . /sw/bin/init.sh
 
@@ -101,56 +151,13 @@ export COLOR_GRAY='\e[1;30m'
 export COLOR_LIGHT_GRAY='\e[0;37m'
 alias colorslist="set | egrep 'COLOR_\w*'"  # Lists all the colors, uses vars in .bashrc_non-interactive
 
-export PS1="\[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]"  # Primary prompt with only a path"""""
+#export PS1="\[${COLOR_GREEN}\]\w > \[${COLOR_NC}\]"  # Primary prompt with only a path"""""
 
-alias ..='cd ..'
-alias ...='cd .. ; cd ..'
-
-# Git
-source /usr/local/bin/my_scripts/make-completion-wrapper.sh
-gitalias gs "git status"
-gitalias ga "git add"
-#gitalias gsq "git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
-gitalias gb "git branch"
-gitalias gc "git checkout"
-gitalias gcm "git checkout master"
-gitalias gcb "git checkout -b"
-gitalias gcamw "git commit -a -m working"
-gitalias gms "git merge --squash"
-gitalias grh "git reset HEAD"
-gitalias grhh "git reset --hard HEAD"
-#gitalias gsf "git svn fetch; git svn rebase; arc build"
-gitalias gpr "git pull --rebase"
-gitalias gl "git log"
-gitalias gd "git diff"
-alias gdc='git diff | ack "^([\+-]|diff)" | less'
-#gitalias gf 'git fetch'
-gitalias ad 'arc diff'
-gitalias adp 'arc diff --preview'
-gitalias gsh 'git show'
-gitalias gca 'git commit -a'
-gitalias gcam "git commit -a -m"
-gitalias gcaa 'git commit -a --amend'
-gitalias gp 'git push'
-gitalias gpu 'git pull'
-#gitalias gu 'git fetch; git svn rebase; arc build'
-gitalias gr 'git rebase -i origin'
-gitalias gcp 'git cherry-pick'
-
-alias ls="ls -G"
-alias ll="ls -l"
-alias la="ls -al"
-alias gD="gb -D"
 CLICOLOR=1;
 LSCOLORS=DxGxcxdxCxcgcdabagacad
 export EDITOR=vim
 export CLICOLOR LSCOLORS
 export LS_COLORS="${LS_COLORS}:di=01;33"
-
-alias vt='vim -t' # useful alias
-
-alias ..='cd ..'
-alias ...='cd ../..'
 
 source ~/.git-completion.bash
 
@@ -196,13 +203,16 @@ alias rm='del'
 # Setting PATH for Python 3.2
 # The orginal version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.2/bin:${PATH}"
+# Set PATH for Racket
+PATH="/Applications/Racket v5.3/bin/:${PATH}"
+PATH="/usr/local/bin/my_scripts:${PATH}"
 export PATH
 
 # {{{
 # Node Completion - Auto-generated, do not touch.
-shopt -s progcomp
-for f in $(command ls ~/.node-completion); do
-  f="$HOME/.node-completion/$f"
-  test -f "$f" && . "$f"
-done
+#setopt -s progcomp
+#for f in $(command ls ~/.node-completion); do
+  #f="$HOME/.node-completion/$f"
+  #test -f "$f" && . "$f"
+#done
 # }}}
