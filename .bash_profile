@@ -75,7 +75,9 @@ alias gD="gb -D"
 alias vbp="vim /Users/Varun/.bash_profile"
 alias vvp="vim /Users/Varun/.vimrc"
 alias sbp="source ~/.bash_profile"
-alias v='/Applications/MacVim.app/Contents/MacOS/Vim '
+# alias v='/Applications/MacVim.app/Contents/MacOS/Vim '
+alias v='vim'
+alias vs='v -S ~/mysession.vim'
 alias vt='vim -t' 
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
@@ -126,7 +128,6 @@ export EDITOR=vim
 #setopt -s histappend
 PROMPT_COMMAND='history -a'
 
-
 # From Venmo Kortina
 parse_git_dirty() {
   [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
@@ -176,7 +177,6 @@ export CLICOLOR LSCOLORS
 export LS_COLORS="${LS_COLORS}:di=01;33"
 
 source ~/.git-completion.bash
-
 
 #ulimit -n 1024
 HISTFILESIZE=1000000000
@@ -233,8 +233,9 @@ export PATH
 #done
 # }}}
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 export GEM_HOME=~/.gem
 export GEM_PATH=~/.gem
 
 [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh # This loads NVM
+
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
