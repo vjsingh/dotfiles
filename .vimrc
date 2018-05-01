@@ -14,13 +14,47 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-" Pathogen
-call pathogen#infect()
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
 "filetype plugin indent on
 filetype on
 filetype plugin on
+
+" Pathogen
+call pathogen#infect()
+"call pathogen#runtime_append_all_bundles()
+" call pathogen#helptags()
+"
+
+" Use vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" Not using default: call plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/bundle')
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'wincent/command-t'
+call plug#end()
+
+"" SYNTASTIC
+" Default Options
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_html_tidy_exec = 'tidy5'
+
+" Syntax Checkers
+let g:syntastic_javascript_checkers=['eslint', 'flow']
+"let g:syntastic_javascript_checkers=['flow']
+"let g:syntastic_debug=3
+let g:syntastic_aggregate_errors = 1  "Aggregate results from multiple checkers
 
 " Have Vim load indentation rules according to the detected filetype. Per
 " default Debian Vim only load filetype specific plugins.
@@ -100,6 +134,12 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+" Navigating location lists (for Syntastic) easily
+" C-n for next, C-p for previous, centers line in middle of buffer
+" C-m plus number for specific line  -- C-m appears to be in use?
+map <C-n> :lne <Enter> zz
+map <C-p> :lp <Enter> zz
+" map <C-m> :lr 
 
 " w!! to write with sudo
 cnoreabbrev <expr> w!!
@@ -464,3 +504,24 @@ function! InsertTabWrapper()
 endfunction
 inoremap <tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <s-tab> <c-n>
+
+"" Save and Restore Session
+fu! SaveSess()
+    "execute 'call mkdir(%:p:h/.vim)'
+    "execute 'mksession! %:p:h/.vim/session.vim'
+		execute ':mksession! ~/mysession.vim'
+endfunction
+
+fu! RestoreSess()
+		"execute 'so %:p:h/.vim/session.vim'
+		"if bufexists(1)
+				"for l in range(1, bufnr('$'))
+						"if bufwinnr(l) == -1
+								"exec 'sbuffer ' . l
+						"endif
+				"endfor
+		"endif
+		execute 'source ~/mysession.vim'
+endfunction 
+" autocmd VimLeave * call SaveSess()
+" autocmd VimEnter * call RestoreSess()
