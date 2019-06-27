@@ -1,3 +1,11 @@
+export CLICOLOR=1  # Has to be before exporting TERM
+# This causes problems sometimes! I don't understand
+# export TERM=xterm-color
+export TERM=xterm-256color
+
+# Shell Integration for iterm 2: https://iterm2.com/documentation-shell-integration.html
+source ~/.iterm2_shell_integration.zsh
+
 # Dirs
 alias cdjun="cd ~/Documents/13Brown/111JuniorYear/Second\ Semester"
 alias cdsen="cd ~/Documents/13Brown/111SeniorYear/"
@@ -9,6 +17,9 @@ alias cdmus="cd ~/Documents/workspace/music"
 alias cdws="cd ~/Documents/workspace/"
 alias cdart="cd ~/Documents/workspace/arter/"
 alias cdclyme="cd ~/Documents/workspace/clyme"
+alias cdclymec="cd ~/Documents/workspace/clyme/client/src"
+alias cdclymes="cd ~/Documents/workspace/clyme/server/src"
+alias cdc="cd ~/Documents/workspace/clyme"
 alias cdcs="cd ~/Documents/workspace/cs173/"
 alias cs176="cd ~/Documents/13Brown/111SeniorYear/cs176/"
 
@@ -26,7 +37,7 @@ alias cdwave="cd ~/Desktop/Everything/Wave"
 
 #Utility
 #alias akk='git grep -n --color --heading --break'
-alias akk='git grep -n --color'
+alias akk='git grep -n --color --ignore-case'
 alias ls='ls -G'
 alias grep='grep -i --color=auto'
 
@@ -72,18 +83,20 @@ alias la="ls -al"
 alias lstree-"ls -R | grep ':$' | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias gD="gb -D"
 
-alias vbp="vim /Users/Varun/.bash_profile"
-alias vvp="vim /Users/Varun/.vimrc"
+alias vbp="v /Users/Varun/.bash_profile"
+alias vvp="v /Users/Varun/.vimrc"
 alias sbp="source ~/.bash_profile"
 # alias v='/Applications/MacVim.app/Contents/MacOS/Vim '
-alias v='vim'
+if type nvim > /dev/null 2>&1; then
+	alias v='nvim'
+	alias vimold='vim'
+	#alias vim='nvim'
+fi
 alias vs='v -S ~/mysession.vim'
 alias vt='vim -t' 
 alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 
-alias sshcs="ssh vjsingh@ssh.cs.brown.edu"
-alias sshcsx="ssh -X vjsingh@ssh.cs.brown.edu"
 alias gpnd='git push nodester master'
 alias sshaz='ssh -vi ~/.ssh/ec2.pem ubuntu@107.21.124.83'
 alias rsjazz='ssh -i ~/.ssh/ec2.pem ubuntu@107.21.124.83 "/var/jazz/update restart"'
@@ -94,6 +107,13 @@ alias upmus='gp; rsmus'
 alias mongoart='mongo staff.mongohq.com:10095/nodejitsudb992359367398 -u nodejitsu -p be8725eaf1cb68e7a129cebf81f66480'
 alias sshpans='ssh pansaari@69.195.124.96'
 alias sshvirion="ssh varun@104.131.226.221" # password is "password"
+alias sshdo='ssh vjsingh@159.65.225.114'
+alias updo='ssh vjsingh@159.65.225.114 "cd venga; rm package-lock.json; git pull; pm2 restart all; npm run-script build-web;"'
+alias upAll='git push; updo;'
+
+alias updateGraphqlTypes='cdclyme; cd server; npx prisma deploy; cd ..; npms getAppSchema; npms generateGraphqlTypes';
+
+alias npms='npm run-script'
 
 alias mvtorrents='mv ~/Downloads/*.torrent ~/Downloads/Torrents/Torrents'
 
@@ -120,11 +140,10 @@ export PATH="/Users/Varun/.gem/bin:${PATH}"
 #export PATH="/Applications/Xcode.app/Contents/Developer/usr/bin:${PATH}"
 
 # source ~/.bashrc
-export TERM=xterm-color
 export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
-export CLICOLOR=1
 #export PS1="\h:\w$ "
 export EDITOR=vim
+export FZF_DEFAULT_COMMAND='fd --type f' # Respect .gitignore for fzf (used in vim)
 #setopt -s histappend
 PROMPT_COMMAND='history -a'
 

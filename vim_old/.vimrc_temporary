@@ -1,0 +1,358 @@
+" These commmands are being moved in .vimrc slowly
+" This started out as vim_old/.vimrc and things get deleted as they are moved into the new .vimrc
+
+
+" Not using default: call plug#begin('~/.vim/plugged')
+call plug#begin('~/.vim/bundle')
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'wincent/command-t'
+call plug#end()
+
+"" SYNTASTIC """"""
+" Default Options
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_html_tidy_exec = 'tidy5'
+
+" Syntax Checkers
+let g:syntastic_javascript_checkers=['eslint', 'flow']
+"let g:syntastic_javascript_checkers=['flow']
+"let g:syntastic_debug=3
+let g:syntastic_aggregate_errors = 1  "Aggregate results from multiple checkers
+
+" Navigating location lists (for Syntastic) easily
+" C-n for next, C-p for previous, centers line in middle of buffer
+" C-m plus number for specific line  -- C-m appears to be in use?
+map <C-n> :lne <Enter> zz
+map <C-p> :lp <Enter> zz
+" map <C-m> :lr 
+
+
+let jslint_command_options = '-conf ~/Dropbox/nix/bin/jsl.conf -nofilelisting -nocontext -nosummary -nologo -process'
+
+hi clear SpellBad
+hi SpellBad cterm=underline,bold ctermfg=red
+
+
+set showcmd            " Show (partial) command in status line.
+"set smartindent        " smart auto intending
+set smarttab           " smart tab handling for indenting
+set autowrite          " Automatically save before commands like :next and :make
+set hidden             " Hide buffers when they are abandoned
+
+" Make ,t run tbgs for word under curser
+"source $ADMIN_SCRIPTS/master.vimrc
+"source /home/engshare/admin/scripts/vim/biggrep.vim
+"map ,t <Esc>:TBGS <cword><CR>
+
+" Eliminating tailing whitespace on save
+"fun! <SID>StripTrailingWhitespaces()
+  "let l = line(".")
+  "let c = col(".")
+  "%s/\s\+$//e
+  "call cursor(l, c)
+"endfun
+
+"autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" Make clipboard work with system clipboard
+set clipboard=unnamed
+
+
+" stop Vim from beeping all the time
+"set vb
+"set noflash
+"set showmatch
+"set ignorecase
+"set report=0
+
+" highlighting
+set hlsearch
+
+" CTAGS ctrl + ] to go in ctrl + t to back out
+set tags=tags;/
+
+" Red highlighting for text over 80 columns wide
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" match OverLength /\%81v.\+/
+
+" .phpt is php too
+"au BufNewFile,BufRead *.php,*.php3,*.php4,*.php5,*.phpt setf php
+"au BufNewFile,BufRead *.config setf sh
+
+" bind "gb" to "git blame" for visual and normal mode.
+":vmap gb :<C-U>!git blame % -L<C-R>=line("'<") <CR>,<C-R>=line("'>")<CR><CR>
+":nmap gb :!git blame %<CR>
+
+ ":map <C-c><C-c> :exe ":cs find c " . expand("<cword>")
+ ":map <C-c><C-g> :exe ":cs find g " . expand("<cword>")
+ ":map <C-c><C-d> :exe ":cs find d " . expand("<cword>")
+ ":map <C-c><C-e> :exe ":cs find e (^\|[^a-zA-Z_])" . expand("<cword>") . "([^a-zA-Z_]\|$)"
+ ":map <C-c><C-a> :exe ":cs find e function " . expand("<cword>") . "([^a-zA-Z_]\|$)"
+ ":map <C-c><C-b> :exe ":cs find s " . expand("<cword>")
+ ":map <C-c><C-f> :cs find f
+ ":map <C-c><C-t> :exe ":cs find t " . expand("<cword>")
+
+
+" Persistent Undo
+"if version >= 730
+  "set undodir=~/.vim/undodir
+  "set undofile
+  "set undolevels=1000 "maximum number of changes that can be undone
+  "set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+"endif
+
+" Use Node.js for Javascript interpretation
+let $JS_CMD='node'
+
+" Auto-compile coffee files when saved
+"autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+
+
+
+" Kortina Venmo
+"autocmd WinEnter * setlocal cursorline
+"autocmd WinLeave * setlocal nocursorline
+autocmd BufRead,BufNewFile,BufDelete * :syntax on
+
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
+
+let g:pyflakes_use_quickfix = 0
+
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python setlocal list
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+autocmd FileType python set ft=python.django " For SnipMate
+autocmd FileType html set ft=html.django_template " For SnipMate
+
+au BufRead,BufNewFile {Capfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
+
+" fix backspace in vim 7
+:set backspace=indent,eol,start
+"nmap <buffer> <CR> gf
+"nmap <buffer> <C-S-y> <Esc>yy<Esc>:bd<CR>:edit @"<CR>
+
+" popout split buffer hack
+" map <C-S-p>  <Esc>:hide<CR>:blast<CR>
+
+" ctrl-p paste
+imap <C-l> <C-r>"
+
+" duplicate line"
+" imap <C-D> <Esc>yyp
+" nmap <C-D> <Esc>yyp
+
+" insert a markdown header, like
+" ==============================
+map ,1 V"zy"zpVr=
+map ,2 V"zy"zpVr-
+"map <leader>h1 VypVr=
+"map <leader>h2 VypVr-
+
+"nmap ,bs :ConqueTermSplit bash<CR>
+"nmap ,bv :ConqueTermVSplit bash<CR>
+
+" copy all to clipboard
+nmap ,a ggVG"*y
+" copy word to clipboard
+nmap ,d "*yiw
+" underline current line, markdown style
+nmap ,u "zyy"zp:.s/./-/g<CR>:let @/ = ""<CR>
+
+" delete inner xml tag
+nmap ,dit dt<dT>
+nmap ,cit dt<cT>
+
+nmap ,t <Leader>t
+
+
+" Revert the current buffer
+" nnoremap \r :e!<CR>
+
+:runtime! ~/.vim/
+":helptags ~/.vim/doc
+
+
+
+let g:pydiction_location = '~/.vim/bundle/pydiction/ftplugin/pydiction-1.2/complete-dict'
+
+"##################################################
+
+" https://wincent.com/blog/2-hours-with-vim
+"function! AckGrep(command)
+"    cexpr system("ack " . a:command)
+"    cw " show quickfix window already
+"endfunction
+"command! -nargs=+ -complete=file Ack call AckGrep(<q-args>)
+"map <leader>a :Ack<space>
+
+" prevent comments from going to beginning of line
+autocmd BufRead *.py inoremap # X<c-h>#
+
+" turn on python folding when you open a file
+" autocmd BufRead *.py set foldmethod=indent
+" autocmd BufRead *.py set foldlevel=1
+
+" use spacebar to toggle folding
+"nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+"vnoremap <Space> zf
+
+
+"##################################################
+" markdown
+"##################################################
+ augroup mkd
+  autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
+ augroup END
+
+"##################################################
+" via http://www.vim.org/scripts/script.php?script_id=30
+"##################################################
+
+map  ,cm   :call PythonCommentSelection()<CR>
+vmap ,cm   :call PythonCommentSelection()<CR>
+map  ,cu   :call PythonUncommentSelection()<CR>
+vmap ,cu   :call PythonUncommentSelection()<CR>
+" Comment out selected lines
+" commentString is inserted in non-empty lines, and should be aligned with
+" the block
+function! PythonCommentSelection()  range
+  let commentString = "#"
+  let cl = a:firstline
+  let ind = 1000    " I hope nobody use so long lines! :)
+
+  " Look for smallest indent
+  while (cl <= a:lastline)
+    if strlen(getline(cl))
+      let cind = indent(cl)
+      let ind = ((ind < cind) ? ind : cind)
+    endif
+    let cl = cl + 1
+  endwhile
+  if (ind == 1000)
+    let ind = 1
+  else
+    let ind = ind + 1
+  endif
+
+  let cl = a:firstline
+  execute ":".cl
+  " Insert commentString in each non-empty line, in column ind
+  while (cl <= a:lastline)
+    if strlen(getline(cl))
+      execute "normal ".ind."|i".commentString
+    endif
+    execute "normal \<Down>"
+    let cl = cl + 1
+  endwhile
+endfunction
+
+" Uncomment selected lines
+function! PythonUncommentSelection()  range
+  " commentString could be different than the one from CommentSelection()
+  " For example, this could be "# \\="
+  let commentString = "#"
+  let cl = a:firstline
+  while (cl <= a:lastline)
+    let ul = substitute(getline(cl),
+             \"\\(\\s*\\)".commentString."\\(.*\\)$", "\\1\\2", "")
+    call setline(cl, ul)
+    let cl = cl + 1
+  endwhile
+endfunction
+
+if findfile('~/Dropbox/Venmo-Devops/gpg/gpg-add-venmo-recipients.vim')
+    source ~/Dropbox/Venmo-Devops/gpg/gpg-add-venmo-recipients.vim
+endif
+
+
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  echo a:cmdline
+  let expanded_cmdline = a:cmdline
+  for part in split(a:cmdline, ' ')
+     if part[0] =~ '\v[%#<]'
+        let expanded_part = fnameescape(expand(part))
+        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+     endif
+  endfor
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:    ' . a:cmdline)
+  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !'. expanded_cmdline
+  setlocal nomodifiable
+  1
+endfunction
+command! -complete=file -nargs=* Gstaged call s:RunShellCommand('git diff --staged')
+" command! -complete=file -nargs=* Git call s:RunShellCommand('git '.<q-args>)
+
+function! DoubleWS()
+    let pos = getpos('.')
+    let reg = getreg('@')
+    exe '%s/^\s*/&&/e'
+    call setreg('@',reg)
+    call setpos('.',pos)
+endfunction
+
+function! HalfWS()
+    let pos = getpos('.')
+    let reg = getreg('@')
+    exe '%s#^\s*#\=matchstr(submatch(0),"^.\\{".string(float2nr(len(submatch(0))/2))."\}")#e'
+    call setreg('@',reg)
+    call setpos('.',pos)
+endfunction
+
+nmap ,dws :call DoubleWS()<CR>
+nmap ,hws :call HalfWS()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MULTIPURPOSE TAB KEY
+" Indent if we're at the beginning of a line. Else, do completion.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <s-tab> <c-n>
+
+"" Save and Restore Session
+fu! SaveSess()
+    "execute 'call mkdir(%:p:h/.vim)'
+    "execute 'mksession! %:p:h/.vim/session.vim'
+		execute ':mksession! ~/mysession.vim'
+endfunction
+
+fu! RestoreSess()
+		"execute 'so %:p:h/.vim/session.vim'
+		"if bufexists(1)
+				"for l in range(1, bufnr('$'))
+						"if bufwinnr(l) == -1
+								"exec 'sbuffer ' . l
+						"endif
+				"endfor
+		"endif
+		execute 'source ~/mysession.vim'
+endfunction 
+" autocmd VimLeave * call SaveSess()
+" autocmd VimEnter * call RestoreSess()

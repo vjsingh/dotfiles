@@ -1,0 +1,37 @@
+snippet createClass
+import * as React from 'react';
+
+export default class ${0} extends React.Component {
+	public render() {
+		return null;
+	}
+}
+endsnippet
+
+snippet createView
+import * as React from 'react';
+import Text from 'src/Components/MyText';
+import styled from 'styled-components/native';
+
+interface InputProps {
+}
+
+const ${0}: React.FC<InputProps> = () => {
+	return (
+		<Container>
+		</Container>
+	);
+};
+export default ${1};
+
+const Container = styled.View\`
+\`;
+endsnippet
+
+snippet constructorReact
+constructor(props) {
+	super(props);
+
+	${0}
+}
+endsnippet
