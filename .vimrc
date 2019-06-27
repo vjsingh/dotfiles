@@ -24,10 +24,10 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'jparise/vim-graphql'  " GraphQL syntax highlighting
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }  " Styled-Components syntax
 Plug 'hail2u/vim-css3-syntax'  " css3 syntax for styled components
-"Plug 'pangloss/vim-javascript'  " Javascript syntax highlighting
 Plug 'neomake/neomake'  " Typescript Linting
 Plug 'leafgarland/typescript-vim'  " Typescript syntax highlighting
 "Plug 'peitalin/vim-jsx-typescript' " React JSX syntax highlighting colors (needs typescript-vim)
+Plug 'pangloss/vim-javascript'  " Javascript syntax highlighting
 Plug 'maxmellon/vim-jsx-pretty'  " JSX + Typescript syntax highlighting
 "Plug 'mxw/vim-jsx'  " JSX Syntax
 "Plug 'Quramy/tsuquyomi'  " Typescript-IDE
@@ -101,13 +101,7 @@ endfunction
 
 vmap <C-r> <Esc>:%s/<c-r>=GetVisual()<cr>//g<left><left>
 
-" set filetypes as typescript.tsx
-autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
-hi xmlTagName guifg=#59ACE5
-hi xmlTag guifg=#59ACE5
-
-" dark blues
-hi xmlEndTag guifg=#2974a1
+"g:vim_jsx_pretty_highlight_close_tag
 
 " Disable YouCompleteMe
 "let g:loaded_youcompleteme = 1
@@ -197,6 +191,15 @@ map <leader>rf :YcmCompleter RefactorRename
 :nnoremap <A-j> <C-w>j<
 :nnoremap <A-k> <C-w>k
 :nnoremap <A-l> <C-w>l
+
+""""""""""""""" vim-jsx-pretty """"""""""""
+
+let g:vim_jsx_pretty_highlight_close_tag = 1
+let g:vim_jsx_pretty_colorful_config = 1
+
+"""""""""""""""""""""""""""""""""""""""""""
+
+
 
 " Typescript support
 " as above, typescript files are typescript.jsx
@@ -455,43 +458,55 @@ hi Type guifg=#e86868
 
 
 
-"""""" vim-jsx ONLY
-hi Identifier cterm=italic
-
-" Blues
-" light blues
-hi xmlTagName guifg=#59ACE5
-hi xmlTag guifg=#59ACE5
+"""" vim-jsx-typescript
+" set filetypes as typescript.tsx
+"autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+"hi xmlTagName guifg=#59ACE5
+"hi xmlTag guifg=#59ACE5
 
 " dark blues
-hi xmlEndTag guifg=#2974a1
-hi jsxCloseString guifg=#2974a1
-hi htmlTag guifg=#2974a1
-hi htmlEndTag guifg=#2974a1
-hi htmlTagName guifg=#59ACE5
-hi jsxAttrib guifg=#1BD1C1
+"hi xmlEndTag guifg=#2974a1
 
-" cyan
-hi Constant guifg=#56B6C2
-hi typescriptBraces guifg=#56B6C2
-hi typescriptEndColons guifg=#56B6C2
-hi typescriptRef guifg=#56B6C2
-hi typescriptPropietaryMethods guifg=#56B6C2
-hi typescriptEventListenerMethods guifg=#56B6C2
-hi typescriptFunction guifg=#56B6C2
-hi typescriptVars guifg=#56B6C2
-hi typescriptParen guifg=#56B6C2
-hi typescriptDotNotation guifg=#56B6C2
-hi typescriptBracket guifg=#56B6C2
-hi typescriptBlock guifg=#56B6C2
-hi typescriptJFunctions guifg=#56B6C2
-hi typescriptSFunctions guifg=#56B6C2
-hi typescriptInterpolationDelimiter guifg=#56B6C2
-hi typescriptIdentifier guifg=#907161 cterm=italic
 
-" javascript
-hi jsParens guifg=#56B6C2
-hi jsObjectBraces guifg=#C678DD
-hi jsFuncBraces guifg=#56B6C2
-hi jsObjectFuncName guifg=#D19A66
-hi jsObjectKey guifg=#56B6C2<Paste>
+
+"""""" vim-jsx ONLY
+"
+"hi Identifier cterm=italic
+"
+"" Blues
+"" light blues
+"hi xmlTagName guifg=#59ACE5
+"hi xmlTag guifg=#59ACE5
+"
+"" dark blues
+"hi xmlEndTag guifg=#2974a1
+"hi jsxCloseString guifg=#2974a1
+"hi htmlTag guifg=#2974a1
+"hi htmlEndTag guifg=#2974a1
+"hi htmlTagName guifg=#59ACE5
+"hi jsxAttrib guifg=#1BD1C1
+"
+"" cyan
+"hi Constant guifg=#56B6C2
+"hi typescriptBraces guifg=#56B6C2
+"hi typescriptEndColons guifg=#56B6C2
+"hi typescriptRef guifg=#56B6C2
+"hi typescriptPropietaryMethods guifg=#56B6C2
+"hi typescriptEventListenerMethods guifg=#56B6C2
+"hi typescriptFunction guifg=#56B6C2
+"hi typescriptVars guifg=#56B6C2
+"hi typescriptParen guifg=#56B6C2
+"hi typescriptDotNotation guifg=#56B6C2
+"hi typescriptBracket guifg=#56B6C2
+"hi typescriptBlock guifg=#56B6C2
+"hi typescriptJFunctions guifg=#56B6C2
+"hi typescriptSFunctions guifg=#56B6C2
+"hi typescriptInterpolationDelimiter guifg=#56B6C2
+"hi typescriptIdentifier guifg=#907161 cterm=italic
+"
+"" javascript
+"hi jsParens guifg=#56B6C2
+"hi jsObjectBraces guifg=#C678DD
+"hi jsFuncBraces guifg=#56B6C2
+"hi jsObjectFuncName guifg=#D19A66
+"hi jsObjectKey guifg=#56B6C2<Paste>
