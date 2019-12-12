@@ -17,8 +17,10 @@ alias cdmus="cd ~/Documents/workspace/music"
 alias cdws="cd ~/Documents/workspace/"
 alias cdart="cd ~/Documents/workspace/arter/"
 alias cdclyme="cd ~/Documents/workspace/clyme"
+alias cdclymeDbUtil="cd ~/Documents/workspace/clyme/server/src/scripts/dbUtil/"
 alias cdclymec="cd ~/Documents/workspace/clyme/client/src"
 alias cdclymes="cd ~/Documents/workspace/clyme/server/src"
+alias cdscripts="cd ~/Documents/workspace/clyme/server/src/scripts/dbUtil/"
 alias cdc="cd ~/Documents/workspace/clyme"
 alias cdcs="cd ~/Documents/workspace/cs173/"
 alias cs176="cd ~/Documents/13Brown/111SeniorYear/cs176/"
@@ -28,7 +30,7 @@ alias cdvp="cd ~/venmo-devops/venmo-platform/"
 alias cdvw="cd ~/venmo-devops/venmo-platform/webapp"
 alias cdms="cd ~/venmo-devops/venmo-platform/mothership"
 alias cddot="cd /Users/Varun/Documents/workspace/dotfiles/"
-alias cdscripts="pushd /usr/local/bin/my_scripts"
+alias cdbinscripts="pushd /usr/local/bin/my_scripts"
 alias cdvi="cd ~/Documents/workspace/virusGame/"
 alias cdfb="cd ~/Documents/facebook11"
 alias cdpans="cd ~/Documents/workspace/pansaari/"
@@ -36,10 +38,12 @@ alias cdpansw="cd ~/Documents/workspace/pansaari/wp-content/themes/wordless_3/"
 alias cdwave="cd ~/Desktop/Everything/Wave"
 
 #Utility
-#alias akk='git grep -n --color --heading --break'
-alias akk='git grep -n --color --ignore-case'
 alias ls='ls -G'
 alias grep='grep -i --color=auto'
+
+function akk() {
+  git grep -n --color --ignore-case $1 ':(exclude)web-build/*' ':(exclude)yarn.lock' ':(exclude)src/src/img/svg/*' ':(exclude)server/src/scripts/notifications/*' ':(exclude)server/src/generated/*' ':(exclude)schema.json' ':(exclude)src/src/generated/*' ':(exclude)server/prisma/prisma-client-ts/*' ':(exclude)src/src/Components/react-native-material-ripple/*'
+}
 
 #Screen
 alias sr="screen -r"
@@ -51,18 +55,24 @@ alias ga="git add"
 #gitalias gsq "git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
 alias gb="git branch"
 alias gc="git checkout"
+#  git checkout --track origin/development
 alias gcm="git checkout master"
 alias gcb="git checkout -b"
 alias gcamw="git commit -a -m working"
 alias gms="git merge --squash"
 alias grh="git reset HEAD"
 alias grhh="git reset --hard HEAD"
+alias gundolastcommit="git reset --soft HEAD~1"
+alias gundoreset="git reset 'HEAD@{1}'"
+# This broke one time and squashed a bunch of commits together. Too dangerous to use
+# alias gsquash="git reset --soft HEAD~2 && git commit --edit -m\"$(git log --format=%B HEAD@{0}..HEAD@{2})\""  # Squash last two commits together, using message of first commit.
 #gitalias gsf "git svn fetch; git svn rebase; arc build"
 alias gpr="git pull --rebase"
 alias git up="git pull --rebase"
 alias gl="git log"
 alias glg="git lg"
-alias gd="git diff"
+#alias gd="git diff"
+alias gd="git diff -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
 alias gdc='git diff | ack="^([\+-]|diff)" | less'
 #gitalias gf 'git fetch'
 alias ad='arc diff'
@@ -98,8 +108,10 @@ alias ..='cd ..'
 alias ...='cd .. ; cd ..'
 
 alias gpnd='git push nodester master'
-alias sshaz='ssh -vi ~/.ssh/ec2.pem ubuntu@107.21.124.83'
-alias rsjazz='ssh -i ~/.ssh/ec2.pem ubuntu@107.21.124.83 "/var/jazz/update restart"'
+#alias sshaz='ssh -vi ~/.ssh/ec2.pem ubuntu@107.21.124.83'
+#alias rsjazz='ssh -i ~/.ssh/ec2.pem ubuntu@107.21.124.83 "/var/jazz/update restart"'
+alias sshaz='ssh -vi ~/.ssh/ec2.pem ubuntu@54.210.38.1'
+alias rsjazz='ssh -i ~/.ssh/ec2.pem ubuntu@54.210.38.1 "/var/jazz/update restart"'
 alias sshmus='ssh -vi ~/.ssh/ec2.pem ubuntu@ec2-107-20-71-252.compute-1.amazonaws.com'
 alias rsmus='ssh -i ~/.ssh/ec2.pem ubuntu@ec2-107-20-71-252.compute-1.amazonaws.com "/var/jazz/update restart"'
 alias upjazz='git push origin master; rsjazz'
@@ -108,10 +120,19 @@ alias mongoart='mongo staff.mongohq.com:10095/nodejitsudb992359367398 -u nodejit
 alias sshpans='ssh pansaari@69.195.124.96'
 alias sshvirion="ssh varun@104.131.226.221" # password is "password"
 alias sshdo='ssh vjsingh@159.65.225.114'
-alias updo='ssh vjsingh@159.65.225.114 "cd venga; rm package-lock.json; git pull; pm2 restart all; npm run-script build-web;"'
+alias updo='ssh vjsingh@159.65.225.114 "cd venga; [ -f package-lock.json ] && rm package-lock.json; git reset --hard HEAD; git pull; pm2 restart all;"'  # npm run-script build-web;"'
 alias upAll='git push; updo;'
+alias upAllWeb='expo build:web; ga *; gcam "build web"; upAll'
+alias epublish='expo publish'
+alias epublishStaging='expo publish --release-channel staging'
+alias sshgoog='gcloud beta compute --project "cedar-spring-258514" ssh --zone "us-east1-b" "instance-1"';
+# To send files to google instance: gcloud beta compute scp ec2.pem instance-1:~
+# or for directories: gcloud beta compute scp --recurse providence_tour_complete instance-1:~/delete
+# To get fles onto google cloud instance (when on google cloud instance :~/)
+# scp -i ec2.pem -r ubuntu@54.210.38.1:/home/ubuntu/mongodb-linux-x86_64-2.0.2 ./
 
-alias updateGraphqlTypes='cdclyme; cd server; npx prisma deploy; cd ..; npms getAppSchema; npms generateGraphqlTypes';
+alias updateGraphqlTypesLocal='cdclyme; npms getAppSchema; npms generateGraphqlTypes';
+alias updateGraphqlTypes='cdclyme; cd server; npx prisma deploy; updateGraphqlTypesLocal';
 
 alias npms='npm run-script'
 
@@ -130,6 +151,7 @@ if [ -f ~/venmo-devops/venmo_host_aliases ]; then
 fi
 
 export PATH="/usr/local/bin:${PATH}"
+export PATH="node_modules/.bin:${PATH}"
 # Setting PATH for MacPython 2.5
 # The orginal version is saved in .bash_profile.pysave
 export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:/Applications/Racket v5.0.1/bin/:${PATH}"

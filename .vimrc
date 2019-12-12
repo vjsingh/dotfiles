@@ -6,10 +6,14 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
+
+" Color Schemes
 Plug 'micha/vim-colors-solarized'
 Plug 'mhartington/oceanic-next'
 Plug 'joshdick/onedark.vim'
+Plug 'haishanh/night-owl.vim'
 Plug 'morhetz/gruvbox'
+
 Plug 'Galooshi/vim-import-js'
 Plug 'tpope/vim-unimpaired'  " Navigating through quicklists and location lists
 Plug 'ervandew/supertab'  " To get ultisnips working with YCM
@@ -24,7 +28,8 @@ Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'jparise/vim-graphql'  " GraphQL syntax highlighting
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }  " Styled-Components syntax
 Plug 'hail2u/vim-css3-syntax'  " css3 syntax for styled components
-Plug 'neomake/neomake'  " Typescript Linting
+Plug 'neomake/neomake'  " Typescript & eslint linting
+Plug 'w0rp/ale' " Typescript & eslint linting
 Plug 'leafgarland/typescript-vim'  " Typescript syntax highlighting
 "Plug 'peitalin/vim-jsx-typescript' " React JSX syntax highlighting colors (needs typescript-vim)
 Plug 'pangloss/vim-javascript'  " Javascript syntax highlighting
@@ -33,12 +38,15 @@ Plug 'maxmellon/vim-jsx-pretty'  " JSX + Typescript syntax highlighting
 "Plug 'Quramy/tsuquyomi'  " Typescript-IDE
 "Plug 'mhartington/nvim-typescript'  "  Alternative to tsuquyomi
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}  " Needed for tsuquyomi
+"Plug 'benjie/neomake-local-eslint.vim'
+Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround'
 
 " Disable Plugins
+Plug 'peitalin/vim-jsx-typescript', { 'on': [] }
 "Plug 'Valloric/YouCompleteMe', { 'on': [] }
 "Plug 'Quramy/tsuquyomi', { 'on': [] }
 "Plug 'leafgarland/typescript-vim', { 'on': [] }
-Plug 'peitalin/vim-jsx-typescript', { 'on': [] }
 "Plug 'neomake/neomake', { 'on': [] }
 "Plug 'hail2u/vim-css3-syntax', { 'on': [] }
 "Plug 'styled-components/vim-styled-components', { 'on': [] }
@@ -114,15 +122,6 @@ vmap <C-r> <Esc>:%s/<c-r>=GetVisual()<cr>//g<left><left>
 "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 """"" Plugins Config  """"""""
-""" Neomake """
-" When writing a buffer (no delay).
-call neomake#configure#automake('w')
-" When writing a buffer (no delay), and on normal mode changes (after 750ms).
-"call neomake#configure#automake('nw', 750)
-" Open location list automatically
-let g:neomake_open_list = 2
-	
-let g:neomake_javascript_enabled_makers = ['eslint']
 
 " Map \t to open fuzzy finder <CR> is "enter"
 map <leader>t :FZF<CR>
@@ -132,6 +131,29 @@ map <leader>f :YcmCompleter FixIt<CR>
 map <leader>g :YcmCompleter OrganizeImports<CR>
 " Applies to all files even non-open ones. :copen afterwards to see modified files
 map <leader>rf :YcmCompleter RefactorRename 
+
+" vim-closetag options
+" These are the file extensions where this plugin is enabled.
+let g:closetag_filenames = '*.tsx,*.html,*.xhtml,*.phtml'
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+" These are the file types where this plugin is enabled.
+let g:closetag_filetypes = 'html,xhtml,phtml'
+" This will make the list of non-closing tags self-closing in the specified files.
+let g:closetag_xhtml_filetypes = 'xhtml,jsx'
+" integer value [0|1]
+" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
+let g:closetag_emptyTags_caseSensitive = 1
+" dict
+" Disables auto-close if not in a "valid" region (based on filetype)
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ }
+" Shortcut for closing tags, default is '>'
+let g:closetag_shortcut = '>'
+" Add > at current position without closing the current tag, default is ''
+let g:closetag_close_shortcut = '<leader>>'
 
 """"" This has been replaced by Far.vim, but was working
 " Multi-file find and replace -- Step 1: Enter string to search for and files
@@ -202,11 +224,38 @@ let g:vim_jsx_pretty_colorful_config = 1
 
 
 " Typescript support
+"
+""" ALE """
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+
+"\   'typescript': ['tsserver'],
+let g:ale_fixers = {
+\  'javascript': ['eslint'],
+\}
+
+let g:ale_fix_on_save = 1
+
+
+""" Neomake """
+" When writing a buffer (no delay).
+" TODO: Enable this
+call neomake#configure#automake('w')
+" When writing a buffer (no delay), and on normal mode changes (after 750ms).
+"call neomake#configure#automake('nw', 750)
+" Open location list automatically
+let g:neomake_open_list = 2
+	
+"let g:neomake_javascript_enabled_makers = ['eslint']
 " as above, typescript files are typescript.jsx
 "let g:neomake_jsx_enabled_makers = ['tsc', 'tslint']
-let g:neomake_jsx_enabled_makers = ['tslint']
+"let g:neomake_jsx_enabled_makers = ['tsc', 'eslint']
 function! neomake#makers#ft#typescript#EnabledMakers() abort
-    return ['tsc', 'tslint']
+    "return ['tsc', 'tslint']
+    "return ['tsc', 'eslint']
+    return ['tsc']
 endfunction
 
 function! neomake#makers#ft#typescript#tsc() abort
@@ -227,26 +276,27 @@ function! neomake#makers#ft#typescript#tsc() abort
     return maker
 endfunction
 
-function! neomake#makers#ft#typescript#tslint() abort
+"function! neomake#makers#ft#typescript#tslint() abort
+function! neomake#makers#ft#typescript#eslint() abort
     let maker = {
         \ 'errorformat': '%-G,%EERROR: %f[%l\, %c]: %m,%E%f[%l\, %c]: %m',
         \ }
     let config = neomake#utils#FindGlobFile('tsconfig.json')
     if !empty(config)
-        let maker.args = ['--project', config]
+        "let maker.args = ['--project', config]
         let maker.cwd = fnamemodify(config, ':h')
     endif
     return maker
 endfunction
 
-" Call to run tslint fix and then reload current file
-function! TSLintFix()
-  silent execute "!tslint --fix %"
+" Call to run eslint fix and then reload current file
+function! ESLintFix()
+  silent execute "!eslint --fix %"
   edit! %
-  Neomake
+  "Neomake
 endfunction
 
-nnoremap <leader>tf :call TSLintFix()<CR>
+nnoremap <leader>ef :call ESLintFix()<CR>
 
 " Call to run typescript compiler on client
 function! TSCompileClient()
@@ -423,6 +473,7 @@ set background=dark
 "colorscheme onedark
 let g:gruvbox_italic=1
 colorscheme gruvbox
+"colorscheme night-owl
 
 "highlight Normal guibg=#21242a
 "highlight MatchParen guifg=#C678DD guibg=#504066
