@@ -10,7 +10,7 @@ endsnippet
 
 snippet createView
 import * as React from 'react';
-import Text from 'src/Components/MyText';
+import MyText from 'src/Components/MyText';
 import styled from 'styled-components/native';
 
 interface InputProps {
@@ -26,6 +26,26 @@ export default ${0};
 
 const Container = styled.View\`
 \`;
+endsnippet
+
+snippet createViewReact
+import * as React from 'react';
+import styled from 'styled-components';
+
+interface InputProps {
+}
+
+const Background: React.FC<InputProps> = props => {
+  return (
+    <Container>
+    </Container>
+  );
+}
+
+export default Background;
+
+const Container = styled.div`
+`;
 endsnippet
 
 snippet constructorReact

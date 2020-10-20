@@ -6,36 +6,43 @@ export TERM=xterm-256color
 # Shell Integration for iterm 2: https://iterm2.com/documentation-shell-integration.html
 source ~/.iterm2_shell_integration.zsh
 
+# Interview Schedule
+source ~/Documents/workspace/interview-schedule/.interview-schedule-credentials
+alias sdocker="docker run --network=host -it postgres psql postgres://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@$POSTGRESQL_HOSTNAME:$POSTGRESQL_PORT/$POSTGRESQL_DB_NAME"
+alias sweb="make dev-server-web"
+alias sworker="make dev-server-web"
+alias sapp="make dev-server-app"
+alias sbook="make dev-server-book"
+
+function startAllInterviewSchedule() {
+  ttab eval "cd ~/Documents/workspace/interview-schedule; make dev-server-book";
+  ttab eval "cd ~/Documents/workspace/interview-schedule; make dev-server-web";
+  ttab eval "cd ~/Documents/workspace/interview-schedule; make dev-server-worker";
+  cd ~/Documents/workspace/interview-schedule; make dev-server-app;
+}
+alias sall='startAllInterviewSchedule'
+
 # Dirs
-alias cdjun="cd ~/Documents/13Brown/111JuniorYear/Second\ Semester"
-alias cdsen="cd ~/Documents/13Brown/111SeniorYear/"
-alias cdjazz="cd ~/Documents/workspace/jazz/jazz"
-alias cdweb="cd ~/Documents/workspace/webmd"
-alias cdjk="cd ~/Documents/workspace/jvoh/jvkoh"
-alias cdvs="cd ~/Documents/workspace/vsingh"
-alias cdmus="cd ~/Documents/workspace/music"
 alias cdws="cd ~/Documents/workspace/"
-alias cdart="cd ~/Documents/workspace/arter/"
+alias cdportfolio="cd ~/Documents/workspace/portfolio"
+alias cdvi="cd ~/Documents/workspace/virusGame/"
+alias cdpans="cd ~/Documents/workspace/pansaari/"
+alias cdpansw="cd ~/Documents/workspace/pansaari/wp-content/themes/wordless_3/"
+
+alias cdc="cd ~/Documents/workspace/clyme"
 alias cdclyme="cd ~/Documents/workspace/clyme"
 alias cdclymeDbUtil="cd ~/Documents/workspace/clyme/server/src/scripts/dbUtil/"
 alias cdclymec="cd ~/Documents/workspace/clyme/client/src"
 alias cdclymes="cd ~/Documents/workspace/clyme/server/src"
 alias cdscripts="cd ~/Documents/workspace/clyme/server/src/scripts/dbUtil/"
-alias cdc="cd ~/Documents/workspace/clyme"
-alias cdcs="cd ~/Documents/workspace/cs173/"
-alias cs176="cd ~/Documents/13Brown/111SeniorYear/cs176/"
 
-alias cdv="cd ~/venmo-devops"
-alias cdvp="cd ~/venmo-devops/venmo-platform/"
-alias cdvw="cd ~/venmo-devops/venmo-platform/webapp"
-alias cdms="cd ~/venmo-devops/venmo-platform/mothership"
+alias cdi="cd ~/Documents/workspace/interview-schedule"
+alias cdic="cd ~/Documents/workspace/interview-schedule/app/client/src/"
+alias cdis="cd ~/Documents/workspace/interview-schedule/app/server/"
+
 alias cddot="cd /Users/Varun/Documents/workspace/dotfiles/"
 alias cdbinscripts="pushd /usr/local/bin/my_scripts"
-alias cdvi="cd ~/Documents/workspace/virusGame/"
 alias cdfb="cd ~/Documents/facebook11"
-alias cdpans="cd ~/Documents/workspace/pansaari/"
-alias cdpansw="cd ~/Documents/workspace/pansaari/wp-content/themes/wordless_3/"
-alias cdwave="cd ~/Desktop/Everything/Wave"
 
 #Utility
 alias ls='ls -G'
@@ -54,7 +61,8 @@ alias gs="git status"
 alias ga="git add"
 #gitalias gsq "git status | grep -v scripts/phpsh | grep -v 'gen-' | grep -v tags | grep -v 'conf/dev.php'"
 alias gb="git branch"
-alias gc="git checkout"
+alias gc="git checkout --no-guess"
+alias gca="git checkout"
 #  git checkout --track origin/development
 alias gcm="git checkout master"
 alias gcb="git checkout -b"
@@ -72,16 +80,18 @@ alias git up="git pull --rebase"
 alias gl="git log"
 alias glg="git lg"
 #alias gd="git diff"
-alias gd="git diff -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
+alias gd="git diff --ignore-space-change -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
+alias gdh="git diff HEAD --ignore-space-change -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
 alias gdc='git diff | ack="^([\+-]|diff)" | less'
 #gitalias gf 'git fetch'
 alias ad='arc diff'
 alias adp='arc diff --preview'
 alias gsh='git show'
-alias gca='git commit -a'
+#alias gca='git commit -a'
 alias gcam='git commit -a -m'
 alias gcaa='git commit -a --amend'
 alias gp='git push'
+alias gpf='git push --force-with-lease'
 alias gpu='git pull'
 #gitalias gu 'git fetch; git svn rebase; arc build'
 alias gr='git rebase -i origin'
@@ -126,6 +136,7 @@ alias upAllWeb='expo build:web; ga *; gcam "build web"; upAll'
 alias epublish='expo publish'
 alias epublishStaging='expo publish --release-channel staging'
 alias sshgoog='gcloud beta compute --project "cedar-spring-258514" ssh --zone "us-east1-b" "instance-1"';
+alias scpPrismaDbBackups='scp -r vjsingh@159.65.225.114:/home/vjsingh/venga_backup/db/prisma_backup-2020-02-28.zip ./'
 # To send files to google instance: gcloud beta compute scp ec2.pem instance-1:~
 # or for directories: gcloud beta compute scp --recurse providence_tour_complete instance-1:~/delete
 # To get fles onto google cloud instance (when on google cloud instance :~/)
@@ -280,3 +291,34 @@ export GEM_PATH=~/.gem
 [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh # This loads NVM
 
 # [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+export PATH="/Users/Varun/Downloads/google-cloud-sdk/bin:$PATH"
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/Varun/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/Users/Varun/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/Varun/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/Varun/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+
+# Pyenv
+eval "$(pyenv init -)"
+export PATH="/Users/Varun/.pyenv/shims:${PATH}"
+export PYENV_SHELL=zsh
+source '/usr/local/Cellar/pyenv/1.2.20/libexec/../completions/pyenv.zsh'
+command pyenv rehash 2>/dev/null
+pyenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(pyenv "sh-$command" "$@")";;
+  *)
+    command pyenv "$command" "$@";;
+  esac
+}
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
