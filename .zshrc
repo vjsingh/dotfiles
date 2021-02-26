@@ -38,7 +38,7 @@ alias rake='noglob rake'
 alias vzsh='vim ~/.zshrc'
 
 # Customize to your needs...
-export PATH="$PATH:/Library/Frameworks/Python.framework/Versions/3.2/bin:/Users/Varun/.gem/ruby/1.8/bin:/Library/Frameworks/Python.framework/Versions/Current/bin:/Applications/Racket\ v5.0.1/bin/:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"
+export PATH="$PATH:/Users/Varun/.gem/ruby/1.8/bin:/Applications/Racket\ v5.0.1/bin/:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"

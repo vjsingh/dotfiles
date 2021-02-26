@@ -13,6 +13,15 @@ alias sweb="make dev-server-web"
 alias sworker="make dev-server-web"
 alias sapp="make dev-server-app"
 alias sbook="make dev-server-book"
+alias sall='startAllInterviewSchedule'
+
+alias dw="make aws-deploy-web"
+alias dswap="make aws-swap"
+alias dls="make aws-ls"
+
+alias dbRemoveAllDockerContainers="docker volume rm $(docker volume ls -q)"
+alias dbDump="pg_dump postgres://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@$POSTGRESQL_HOSTNAME:$POSTGRESQL_PORT/$POSTGRESQL_DB_NAME > /Users/Varun/Documents/workspace/interview-schedule/mine/db\ backups/interview_schedule.dump"
+alias dbRestore="pg_dump postgres://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@$POSTGRESQL_HOSTNAME:$POSTGRESQL_PORT/$POSTGRESQL_DB_NAME < /Users/Varun/Documents/workspace/interview-schedule/mine/db\ backups/interview_schedule.dump"
 
 function startAllInterviewSchedule() {
   ttab eval "cd ~/Documents/workspace/interview-schedule; make dev-server-book";
@@ -20,7 +29,6 @@ function startAllInterviewSchedule() {
   ttab eval "cd ~/Documents/workspace/interview-schedule; make dev-server-worker";
   cd ~/Documents/workspace/interview-schedule; make dev-server-app;
 }
-alias sall='startAllInterviewSchedule'
 
 # Dirs
 alias cdws="cd ~/Documents/workspace/"
@@ -70,6 +78,7 @@ alias gcamw="git commit -a -m working"
 alias gms="git merge --squash"
 alias grh="git reset HEAD"
 alias grhh="git reset --hard HEAD"
+alias gunadd="git reset HEAD --"
 alias gundolastcommit="git reset --soft HEAD~1"
 alias gundoreset="git reset 'HEAD@{1}'"
 # This broke one time and squashed a bunch of commits together. Too dangerous to use
@@ -82,6 +91,7 @@ alias glg="git lg"
 #alias gd="git diff"
 alias gd="git diff --ignore-space-change -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
 alias gdh="git diff HEAD --ignore-space-change -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
+alias gdh1="git diff HEAD~1 --ignore-space-change -- . ':(exclude)schema.json' ':(exclude)server/src/generated/*' ':(exclude)src/src/generated/*' ':(exclude)./yarn.lock'"
 alias gdc='git diff | ack="^([\+-]|diff)" | less'
 #gitalias gf 'git fetch'
 alias ad='arc diff'
@@ -92,9 +102,10 @@ alias gcam='git commit -a -m'
 alias gcaa='git commit -a --amend'
 alias gp='git push'
 alias gpf='git push --force-with-lease'
-alias gpu='git pull'
+alias gu='git pull'
 #gitalias gu 'git fetch; git svn rebase; arc build'
-alias gr='git rebase -i origin'
+alias gr='git rebase -i master'
+alias grc='git rebase --continue'
 alias gcp='git cherry-pick'
 
 alias ls="ls -G"
@@ -132,7 +143,7 @@ alias sshvirion="ssh varun@104.131.226.221" # password is "password"
 alias sshdo='ssh vjsingh@159.65.225.114'
 alias updo='ssh vjsingh@159.65.225.114 "cd venga; [ -f package-lock.json ] && rm package-lock.json; git reset --hard HEAD; git pull; pm2 restart all;"'  # npm run-script build-web;"'
 alias upAll='git push; updo;'
-alias upAllWeb='expo build:web; ga *; gcam "build web"; upAll'
+alias upAllWeb='npm run build-web; ga *; gcam "build web"; upAll'
 alias epublish='expo publish'
 alias epublishStaging='expo publish --release-channel staging'
 alias sshgoog='gcloud beta compute --project "cedar-spring-258514" ssh --zone "us-east1-b" "instance-1"';
@@ -163,12 +174,10 @@ fi
 
 export PATH="/usr/local/bin:${PATH}"
 export PATH="node_modules/.bin:${PATH}"
-# Setting PATH for MacPython 2.5
-# The orginal version is saved in .bash_profile.pysave
-export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:/Applications/Racket v5.0.1/bin/:${PATH}"
 #Set path for ruby gems
 #export PATH="/Users/Varun/.gem/ruby/1.8/bin:${PATH}" /Users/Varun/.gem/bin
 export PATH="/Users/Varun/.gem/bin:${PATH}"
+export PATH="/Users/Varun/Library/Android/sdk/platform-tools/:${PATH}"
 
 #export PATH="/Applications/Xcode.app/Contents/Developer/usr/bin:${PATH}"
 
@@ -268,9 +277,6 @@ done
 }
 #alias rm='del'
 
-# Setting PATH for Python 3.2
-# The orginal version is saved in .bash_profile.pysave
-PATH="/Library/Frameworks/Python.framework/Versions/3.2/bin:${PATH}"
 # Set PATH for Racket
 PATH="/Applications/Racket v5.3/bin/:${PATH}"
 PATH="/usr/local/bin/my_scripts:${PATH}"
@@ -300,25 +306,34 @@ if [ -f '/Users/Varun/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/User
 if [ -f '/Users/Varun/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/Users/Varun/Downloads/google-cloud-sdk/completion.bash.inc'; fi
 
 # Pyenv
-eval "$(pyenv init -)"
-export PATH="/Users/Varun/.pyenv/shims:${PATH}"
-export PYENV_SHELL=zsh
-source '/usr/local/Cellar/pyenv/1.2.20/libexec/../completions/pyenv.zsh'
-command pyenv rehash 2>/dev/null
-pyenv() {
-  local command
-  command="${1:-}"
-  if [ "$#" -gt 0 ]; then
-    shift
-  fi
+function deletePython() {
+  eval "$(pyenv init -)"
+  export PATH="/Users/Varun/.pyenv/shims:${PATH}"
+  export PYENV_SHELL=zsh
+  source '/usr/local/Cellar/pyenv/1.2.20/libexec/../completions/pyenv.zsh'
+  command pyenv rehash 2>/dev/null
+  pyenv() {
+    local command
+    command="${1:-}"
+    if [ "$#" -gt 0 ]; then
+      shift
+    fi
 
-  case "$command" in
-  rehash|shell)
-    eval "$(pyenv "sh-$command" "$@")";;
-  *)
-    command pyenv "$command" "$@";;
-  esac
+    case "$command" in
+    rehash|shell)
+      eval "$(pyenv "sh-$command" "$@")";;
+    *)
+      command pyenv "$command" "$@";;
+    esac
+  }
+
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
 }
 
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
